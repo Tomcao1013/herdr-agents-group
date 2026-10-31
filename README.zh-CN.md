@@ -10,6 +10,10 @@
 
 ---
 
+![Agents Group 演示：六种 workspace 配色、带名称的组间分隔线及任务名优先显示](assets/demo.png)
+
+*真实 Herdr 与插件效果；项目和任务均为演示数据，未调用模型。*
+
 **一眼看清每个 agent 属于哪个 workspace。**
 
 一个 [Herdr](https://github.com/herdrdev/herdr) 侧栏插件。让 workspace 标签与其中的 agent 使用相同配色，并在 workspace 组之间添加带名称的分割线。只改变显示，不改变 agent 执行、焦点或 workspace 归属。

@@ -10,6 +10,10 @@
 
 ---
 
+![Agents Group showing six workspace colors, named group dividers, and task-first agent names](assets/demo.png)
+
+*Real Herdr and plugin; synthetic projects and tasks. No live model requests.*
+
 **see which workspace every agent belongs to.**
 
 A sidebar plugin for [Herdr](https://github.com/herdrdev/herdr). It colors workspace labels and their agents with the same palette, and adds named dividers between workspace groups. It changes presentation—not agent execution, focus, or workspace membership.
