@@ -56,7 +56,7 @@ herdr plugin link "$PWD" --enabled
 herdr plugin action invoke install-layout --plugin herdr-agents-group
 ```
 
-此 action 会修改 `config.toml`、重新加载 Herdr 配置并同步侧栏。仅安装插件只会注册插件及其 token 更新逻辑；自定义侧栏行需要额外执行此 action。请在 Herdr 插件日志中确认 action 已完成，不要仅凭命令已发出就认定布局安装成功。
+此 action 会修改 `config.toml`、重新加载 Herdr 配置并同步侧栏；如果带标记的配置块已是最新，则只会提示已是最新，不重新加载也不同步。仅安装插件只会注册插件及其 token 更新逻辑；自定义侧栏行需要额外执行此 action。请在 Herdr 插件日志中确认 action 已完成，不要仅凭命令已发出就认定布局安装成功。
 
 ### 配置安全
 
@@ -81,7 +81,7 @@ herdr plugin action invoke uninstall-layout --plugin herdr-agents-group
 herdr plugin action invoke clear --plugin herdr-agents-group
 ```
 
-- `install-layout` — 安装或替换带标记的布局，重新加载配置并刷新 token。
+- `install-layout` — 安装或替换带标记的布局，重新加载配置并刷新 token；如果带标记的配置块已是最新，则不会重新加载配置，也不会刷新 token。
 - `uninstall-layout` — 移除带标记的布局并重新加载配置；实际移除了配置块时，也会清除插件 token。
 - `clear` — 清除当前 snapshot 中 pane 和 workspace 上的 `ag_` token，保留其他名称的 token。**不会禁用插件。** 后续事件仍可能重新生成这些 token，即使布局已移除。
 

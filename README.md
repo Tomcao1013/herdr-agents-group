@@ -56,7 +56,7 @@ Then explicitly install the sidebar layout in the target Herdr session:
 herdr plugin action invoke install-layout --plugin herdr-agents-group
 ```
 
-This action changes `config.toml`, reloads Herdr's configuration, and reconciles the sidebar. Plugin installation alone only registers the plugin and its token updates; the custom sidebar rows need this extra action. Check the action's completion in Herdr's plugin logs before assuming the layout was installed.
+This action changes `config.toml`, reloads Herdr's configuration, and reconciles the sidebar; when the marked block is already up to date, it reports that and does neither. Plugin installation alone only registers the plugin and its token updates; the custom sidebar rows need this extra action. Check the action's completion in Herdr's plugin logs before assuming the layout was installed.
 
 ### configuration safety
 
@@ -81,7 +81,7 @@ herdr plugin action invoke uninstall-layout --plugin herdr-agents-group
 herdr plugin action invoke clear --plugin herdr-agents-group
 ```
 
-- `install-layout` — installs or replaces the marked layout, reloads config, and refreshes tokens.
+- `install-layout` — installs or replaces the marked layout, reloads config, and refreshes tokens; when the marked block is already up to date, it neither reloads nor refreshes.
 - `uninstall-layout` — removes the marked layout and reloads config; when a block was removed, it also clears the plugin's tokens.
 - `clear` — removes `ag_` tokens from panes and workspaces in the current snapshot, leaving other token names alone. **It does not disable the plugin.** Subsequent events can recreate those tokens, even after layout removal.
 

@@ -32,7 +32,13 @@ def _run(arguments: Sequence[str]) -> str:
     command = [herdr_binary(), *arguments]
     try:
         completed = subprocess.run(
-            command, capture_output=True, text=True, timeout=COMMAND_TIMEOUT_SECONDS, check=False
+            command,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=COMMAND_TIMEOUT_SECONDS,
+            check=False,
         )
     except subprocess.TimeoutExpired as error:
         raise HerdrError(f"'herdr {arguments[0]} {arguments[1]}' timed out after {COMMAND_TIMEOUT_SECONDS}s") from error

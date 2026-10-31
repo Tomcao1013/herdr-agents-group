@@ -12,7 +12,7 @@ PRIORITY_SORT = re.compile(r'^\s*agent_panel_sort\s*=\s*"priority"', re.MULTILIN
 
 
 class ConfigConflictError(Exception):
-    """The config already has something the block would clash with; nothing was written."""
+    """The config cannot be changed safely; nothing was written."""
 
 
 def _table_header(table: str) -> re.Pattern:

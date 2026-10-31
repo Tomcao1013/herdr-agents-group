@@ -9,7 +9,7 @@ import sys
 import tempfile
 import time
 from pathlib import Path
-from typing import Sequence
+from typing import Optional, Sequence
 
 from . import herdr_cli
 from .colors import PALETTE, state_path
@@ -51,18 +51,27 @@ def _read_config() -> str:
         return config_path().read_text(encoding="utf-8")
     except FileNotFoundError:
         return ""
+    except UnicodeDecodeError as error:
+        raise ConfigConflictError(
+            f"{config_path()} is not valid UTF-8; fix or remove the file, then run the command again"
+        ) from error
 
 
-def _write_config_with_backup(new_text: str) -> Path:
-    """Back up the current config, then replace it atomically."""
+def _write_config_with_backup(new_text: str) -> Optional[Path]:
+    """Back up an existing config, then replace it atomically."""
     target = config_path()
-    backup = target.with_name(f"{target.name}.bak-agents-group-{time.strftime('%Y%m%d-%H%M%S')}")
+    backup: Optional[Path] = None
     if target.exists():
+        backup = target.with_name(f"{target.name}.bak-agents-group-{time.strftime('%Y%m%d-%H%M%S')}")
         backup.write_bytes(target.read_bytes())
     temporary = target.with_name(f".{target.name}.agents-group.tmp")
     temporary.write_text(new_text, encoding="utf-8")
     os.replace(temporary, target)
     return backup
+
+
+def _with_backup(message: str, backup: Optional[Path]) -> str:
+    return message if backup is None else f"{message} Backup: {backup.name}"
 
 
 def reconcile() -> None:
@@ -84,7 +93,7 @@ def install_layout() -> None:
     backup = _write_config_with_backup(updated)
     herdr_cli.reload_config()
     reconcile()
-    herdr_cli.notify(NOTIFY_TITLE, f"Sidebar layout installed. Backup: {backup.name}")
+    herdr_cli.notify(NOTIFY_TITLE, _with_backup("Sidebar layout installed.", backup))
 
 
 def uninstall_layout() -> None:
@@ -96,7 +105,7 @@ def uninstall_layout() -> None:
     backup = _write_config_with_backup(updated)
     herdr_cli.reload_config()
     clear_all(herdr_cli.read_snapshot())
-    herdr_cli.notify(NOTIFY_TITLE, f"Sidebar layout removed. Backup: {backup.name}")
+    herdr_cli.notify(NOTIFY_TITLE, _with_backup("Sidebar layout removed.", backup))
 
 
 def clear_tokens() -> None:
