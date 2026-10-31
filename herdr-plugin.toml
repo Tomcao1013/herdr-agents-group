@@ -1,0 +1,101 @@
+id = "herdr-agents-group"
+name = "Agents Group"
+version = "0.1.0"
+min_herdr_version = "0.9.5"
+description = "Color each agent in the sidebar by the workspace it belongs to, and draw a named divider between workspace groups."
+platforms = ["linux", "macos"]
+
+# Every event runs the same idempotent reconcile. Bursts are coalesced by a
+# lock + pending flag, and only changed tokens are written, so our own writes
+# settle after one extra no-op pass.
+[[startup]]
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "workspace.created"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "workspace.closed"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "workspace.renamed"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "workspace.moved"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "workspace.reordered"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "tab.created"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "tab.closed"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "tab.moved"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "pane.created"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "pane.closed"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "pane.exited"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "pane.moved"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "pane.agent_detected"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+# No plugin event fires when another plugin writes a pane token (pane.updated
+# is socket-subscription only), so a status change is the hook that picks up
+# automatic-rename's topic and fresh terminal titles.
+[[events]]
+on = "pane.agent_status_changed"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "tab.renamed"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "worktree.created"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[events]]
+on = "worktree.removed"
+command = ["/usr/bin/python3", "main.py", "reconcile"]
+
+[[actions]]
+id = "install-layout"
+title = "Agents Group: install sidebar layout"
+contexts = ["global"]
+command = ["/usr/bin/python3", "main.py", "install-layout"]
+
+[[actions]]
+id = "uninstall-layout"
+title = "Agents Group: remove sidebar layout"
+contexts = ["global"]
+command = ["/usr/bin/python3", "main.py", "uninstall-layout"]
+
+[[actions]]
+id = "clear"
+title = "Agents Group: clear plugin tokens"
+contexts = ["global"]
+command = ["/usr/bin/python3", "main.py", "clear"]
