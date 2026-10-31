@@ -66,7 +66,7 @@ def run_coalesced(state_dir: Path, run_pass: Callable[[], object]) -> None:
     """Run passes under a lock; events arriving meanwhile only mark a pending flag.
 
     The lock holder keeps draining the flag, and re-checks it after releasing,
-    so a burst of events costs at most a few passes and none is lost.
+    so a burst of events costs at most a few passes instead of one per event.
     """
     state_dir.mkdir(parents=True, exist_ok=True)
     pending = state_dir / "pending"

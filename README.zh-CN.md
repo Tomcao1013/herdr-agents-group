@@ -125,7 +125,7 @@ herdr plugin uninstall herdr-agents-group
 python3 -m unittest discover -s tests -v
 ```
 
-测试仅使用标准库，无需运行 Herdr 服务。覆盖颜色分配与状态文件、名称与分割线格式、token 规划与差异、带标记配置块处理以及事件合并。单元测试不能替代真实侧栏、远程机器或跨平台集成验证。
+测试仅使用标准库，无需运行 Herdr 服务。覆盖颜色分配与状态文件、名称与分割线格式、token 规划与差异、带标记配置块处理、Herdr CLI 输出处理与 action 通知以及事件合并。单元测试不能替代真实侧栏、远程机器或跨平台集成验证。
 
 ## 许可证
 

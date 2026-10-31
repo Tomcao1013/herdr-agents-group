@@ -125,7 +125,7 @@ From the repository root, using Python 3.9+:
 python3 -m unittest discover -s tests -v
 ```
 
-The tests use only the standard library and do not need a running Herdr server. They cover color allocation and state files, naming and divider formatting, token planning and diffs, marked config-block handling, and event coalescing. They do not replace live sidebar, remote-machine, or cross-platform integration checks.
+The tests use only the standard library and do not need a running Herdr server. They cover color allocation and state files, naming and divider formatting, token planning and diffs, marked config-block handling, Herdr CLI output handling and action notifications, and event coalescing. They do not replace live sidebar, remote-machine, or cross-platform integration checks.
 
 ## license
 

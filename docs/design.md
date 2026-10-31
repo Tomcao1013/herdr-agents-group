@@ -118,15 +118,15 @@
 
 | ID | 行为 |
 | --- | --- |
-| `install-layout` | 备份配置，安装/替换托管块，reload-config，再 reconcile |
+| `install-layout` | 备份已有配置，安装/替换托管块，reload-config，再 reconcile |
 | `uninstall-layout` | 有托管块时备份配置、删除块、reload-config，并清除当前 snapshot 的插件 token；无托管块时直接返回 |
 | `clear` | 只清除当前 snapshot 的 `ag_` token，不删除布局或颜色映射 |
 
-配置文件使用 `HERDR_CONFIG_PATH`，未设置时为 `~/.config/herdr/config.toml`。备份在原文件旁，名为 `config.toml.bak-agents-group-<时间戳>`（实际前缀随配置文件名），以同目录临时文件替换配置；父目录需要已存在且可写。
+配置文件使用 `HERDR_CONFIG_PATH`，未设置时为 `~/.config/herdr/config.toml`。备份仅在原配置文件已存在时创建，位于原文件旁，名为 `config.toml.bak-agents-group-<时间戳>`（实际前缀随配置文件名），以同目录临时文件替换配置；父目录需要已存在且可写。
 
-托管块标记为 `# >>> herdr-agents-group >>>` 和 `# <<< herdr-agents-group <<<`。检测到块外已有 `[ui.sidebar.agents]` 或 `[ui.sidebar.spaces]` 时安装会拒绝，不自动合并；缺少结束标记也会报冲突。检测使用文本/正则而非完整 TOML 语义解析，不应据此认为所有等价 TOML 写法均能安全识别。用户应先备份、处理冲突再安装。
+托管块标记为 `# >>> herdr-agents-group >>>` 和 `# <<< herdr-agents-group <<<`。检测到块外已有 `[ui.sidebar.agents]` 或 `[ui.sidebar.spaces]` 时安装会拒绝，不自动合并；缺少结束标记也会报冲突。配置文件不是有效 UTF-8 时，需要读取配置的 reconcile、install-layout、uninstall-layout 均报错返回，不写入配置。检测使用文本/正则而非完整 TOML 语义解析，不应据此认为所有等价 TOML 写法均能安全识别。用户应先备份、处理冲突再安装。
 
-配置写入、reload 与 token 写入不是一个事务：reload 或后续刷新失败不会自动恢复旧配置。若布局已完全相同，安装直接返回，不额外 reconcile；若没有托管块，卸载直接返回，不清 token。
+配置写入、reload 与 token 写入不是一个事务：reload 或后续刷新失败不会自动恢复旧配置。若布局已完全相同，安装直接返回，既不 reload-config 也不额外 reconcile；若没有托管块，卸载直接返回，不清 token。
 
 没有 shutdown/禁用插件的自动清理钩子。`clear` 后只要插件仍启用，后续事件即可重新写入 token；`uninstall-layout` 也不禁用插件或删除状态文件。完全移除应先停止/禁用事件触发，再移除布局并清理 token，避免运行中的 reconcile 重新写回；需要恢复旧布局时参考备份手工处理。
 
